@@ -1,8 +1,11 @@
 from fastapi import FastAPI, HTTPException, Query
 from keras.models import load_model
+from PIL import Image, ImageOps
 import numpy as np
 import tensorflow as tf
 import requests
+from io import BytesIO
+
 
 # Disable scientific notation for clarity
 np.set_printoptions(suppress=True)
@@ -38,7 +41,11 @@ app = FastAPI()
 @app.get("/classify/")  # Use GET method
 async def classify_image(image_url: str = Query(..., description="The URL of the image to classify")):
     try:
-        image = read_tensor_from_image_url(image_url)
+        # image = read_tensor_from_image_url(image_url)
+        response = requests.get(image_url)
+        image = Image.open(BytesIO(response.content)).convert("RGB")
+        size = (224, 224)
+        image = ImageOps.fit(image, size, Image.Resampling.LANCZOS)
         image_array = np.asarray(image)
         normalized_image_array = (image_array.astype(np.float32) / 127.5) - 1
         data[0] = normalized_image_array
