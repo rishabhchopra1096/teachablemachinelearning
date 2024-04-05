@@ -11,7 +11,7 @@ np.set_printoptions(suppress=True)
 model = load_model("keras_model_v2.h5", compile=False)
 
 # Load the labels
-class_names = open("labels.txt_v2", "r").readlines()
+class_names = open("labels_v2.txt", "r").readlines()
 
 # Create the array of the right shape to feed into the keras model
 # The 'length' or number of images you can put into the array is
