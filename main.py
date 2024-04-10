@@ -6,7 +6,6 @@ import tensorflow as tf
 import requests
 from io import BytesIO
 
-
 # Disable scientific notation for clarity
 np.set_printoptions(suppress=True)
 
@@ -21,19 +20,19 @@ class_names = open("labels_v2.txt", "r").readlines()
 # determined by the first position in the shape tuple, in this case 1
 data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
 
-def read_tensor_from_image_url(url,
-                               input_height=224,
-                               input_width=224,
-                               input_mean=0,
-                               input_std=255):
-    image_reader = tf.image.decode_jpeg(
-        requests.get(url).content, channels=3, name="jpeg_reader")
-    float_caster = tf.cast(image_reader, tf.float32)
-    dims_expander = tf.expand_dims(float_caster, 0)
-    resized = tf.image.resize(dims_expander,[input_height,input_width], method='bilinear',antialias=True, name = None)
-    normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
+# def read_tensor_from_image_url(url,
+#                                input_height=224,
+#                                input_width=224,
+#                                input_mean=0,
+#                                input_std=255):
+#     image_reader = tf.image.decode_jpeg(
+#         requests.get(url).content, channels=3, name="jpeg_reader")
+#     float_caster = tf.cast(image_reader, tf.float32)
+#     dims_expander = tf.expand_dims(float_caster, 0)
+#     resized = tf.image.resize(dims_expander,[input_height,input_width], method='bilinear',antialias=True, name = None)
+#     normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
 
-    return normalized
+#     return normalized
 
 
 app = FastAPI()
